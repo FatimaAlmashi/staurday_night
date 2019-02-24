@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="{% url 'movie-list' %}">
+	<div class="input-group mb-3">
+	  <input class="form-control" placeholder="Search" name="search" value="{{ request.GET.search }}">
+	  <div class="input-group-append">
+	    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search <i class="fas fa-search"></i></button>
+	  </div>
+	</div>
+</form>
+
+<div class="row">
+	{% for movie in movies %}
+	<div class="col-12 col-sm-6 col-md-3">
+		<div class="card">
+		  <img src="{{movie.poster.url}}" class="card-img-top">
+		  <div class="card-body">
+		    <h5 class="card-title">{{movie.title}}</h5>
+		    <p class="card-text">{{movie.release_date}}</p>
+		    <a href="{{ movie.get_absolute_url }}" class="btn btn-dark">More Info</a>
+		    {% if request.user.is_authenticated %}
+		    	<button id="mov-{{movie.id}}" class="btn btn-dark {% if movie.id in favorited %}text-warning{% endif %}" onclick="pizza({{movie.id}})">
+			    	<i class="fas fa-pizza-slice"></i>
+			    </button>	
+		    {% endif %}
+		  </div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+<script>
+	function pizza(id){
+		let button = "#mov-" + id;
+		$.ajax({
+			type: "GET",
+			url: "/pizza/"+id+"/",
+			success: function(data){
+				if(data.favorited){
+					$(button).addClass('text-warning');
+				}
+				else{
+					$(button).removeClass('text-warning');
+				}
+			},
+			error: function(){
+				console.log("Something went wrong.")
+			}
+		})
+	}
+</script>
+{% endblock content %}

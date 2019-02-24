@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="{% url 'tv-show-api' %}">
+	<div class="input-group mb-3">
+	  <input class="form-control" placeholder="Search" name="search" value="{{ request.GET.search }}">
+	  <div class="input-group-append">
+	    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search <i class="fas fa-search"></i></button>
+	  </div>
+	</div>
+</form>
+
+<div class="row">
+	{% for item in response %}
+	<div class="col-12 col-sm-6 col-md-3">
+		<div class="card">
+		  <img src="{{item.show.image.original}}" class="card-img-top">
+		  <div class="card-body">
+		    <h5 class="card-title">{{item.show.name}}</h5>
+		    <p class="card-text">Premiered: {{item.show.premiered}}</p>
+		    <p class="card-text">Genres:
+		    	<ul>
+		    		{% for genre in item.show.genres %}
+		    			<li>{{genre}}</li>
+		    		{% endfor %}
+		    	</ul> 
+		    </p>
+		    <a href="{{ item.show.url }}" class="btn btn-dark">More Info</a>
+		  </div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock content %}

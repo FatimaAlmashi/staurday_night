@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+	<div class="jumbotron col-8">
+		<form action="{% url 'signin' %}" method="POST">
+			{% csrf_token %}
+			{{ form | crispy }}
+			<input type="submit" value="Signin" class="btn btn-outline-success">
+			<a href="{% url 'google_login' %}" class="btn btn-outline-primary">
+				Sign in using Google
+			</a>
+		</form>
+	</div>
+</div>
+{% endblock content %}
